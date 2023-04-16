@@ -1,66 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Live Speech Transcription and Text-to-Speech</title>
-</head>
-<body>
-  <button id="speech-btn">Start</button>
-  <div id="current-transcription"></div>
-  <div id="previous-transcriptions"></div>
-  <button id="repeat-btn">Repeat</button>
-  <script>
-    const recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-
-    const speechBtn = document.getElementById('speech-btn');
-    const repeatBtn = document.getElementById('repeat-btn');
-    const currentTranscription = document.getElementById('current-transcription');
-    const previousTranscriptions = document.getElementById('previous-transcriptions');
-    let isListening = false;
-
-    const toggleSpeechRecognition = () => {
-      if (isListening) {
-        recognition.stop();
-        speechBtn.textContent = 'Start';
-      } else {
-        recognition.start();
-        speechBtn.textContent = 'Stop';
-      }
-      isListening = !isListening;
-    }
-
-    speechBtn.addEventListener('click', toggleSpeechRecognition);
-
-    recognition.addEventListener('result', event => {
-      const transcript = event.results[event.resultIndex][0].transcript;
-      currentTranscription.textContent = transcript;
-      repeatText(transcript);
-      moveCurrentTranscriptionToPrevious();
-    });
-
-    const repeatText = (text) => {
-      const speech = new SpeechSynthesisUtterance();
-      speech.text = text;
-      speech.volume = 1;
-      speech.rate = 1;
-      speech.pitch = 1;
-      window.speechSynthesis.speak(speech);
-    };
-
-    repeatBtn.addEventListener('click', () => {
-      const transcript = currentTranscription.textContent;
-      repeatText(transcript);
-    });
-
-    const moveCurrentTranscriptionToPrevious = () => {
-      const transcript = currentTranscription.textContent;
-      if (transcript) {
-        const previousTranscription = document.createElement('div');
-        previousTranscription.textContent = transcript;
-        previousTranscriptions.prepend(previousTranscription);
-        currentTranscription.textContent = '';
-      }
-    };
-  </script>
-</body>
+  <head>
+    <script src="text-to-speech.js"></script>
+    <script src="speech-to-text.js"></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <div id="thread"></div>
+    <div id="transcript"></div>
+  </body>
 </html>
